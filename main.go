@@ -22,6 +22,3 @@ func handleWebsiteFiles (w http.ResponseWriter, r *http.Request){
         http.FileServer(http.Dir("./frontend/dist"))
 }
 
-func handleUploadFile(w http.ResponseWriter, r *http.Request){
-        w.WriteHeader(http.StatusOK)
-}
