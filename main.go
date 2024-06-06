@@ -1,24 +1,20 @@
 package main
 
 import (
-        "net/http"
-        "log"
+	"log"
+	"net/http"
 )
 
 func main(){
-        http.HandleFunc("/", handleWebsiteFiles)
-        http.HandleFunc("/api/uploadFile", handleUploadFile)
-        http.HandleFunc("/api/getSharedFile", handleGetSharedFile)
+    http.Handle("/", http.FileServer(http.Dir("./frontend/dist")))
 
-        const PORT = ":8088"
-        err := http.ListenAndServe(PORT, nil)
-        if err != nil {
-                log.Println("Error starting server")
-                return
-        }
+    http.HandleFunc("/api/uploadFile", handleUploadFile)
+    http.HandleFunc("/api/getSharedFile", handleGetSharedFile)
+
+    const PORT = ":8088"
+    err := http.ListenAndServe(PORT, nil)
+    if err != nil {
+        log.Println("Error starting server")
+        return
+    }
 }
-
-func handleWebsiteFiles (w http.ResponseWriter, r *http.Request){
-        http.FileServer(http.Dir("./frontend/dist"))
-}
-
