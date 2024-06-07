@@ -1,13 +1,28 @@
 package main
 
 import (
-        "net/http"
-        "os"
-        "io"
+	"io"
+	"net/http"
+	"os"
+
+	"github.com/google/uuid"
 )
 
 func handleGetSharedFile(w http.ResponseWriter, r *http.Request){
-        w.WriteHeader(http.StatusOK)
+	file, err := os.Open("shared_files/" + r.URL.Query().Get("file"))
+	if err != nil {
+		http.Error(w, "Error opening the file", http.StatusInternalServerError)
+		return
+	}
+	defer file.Close()
+
+	if _, err := io.Copy(w, file); err != nil {
+		http.Error(w, "Error sending the file", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/octet-stream")
+	w.Header().Set("Content-Disposition", "attachment; filename=" + r.URL.Query().Get("file"))
 }
 
 func handleUploadFile(w http.ResponseWriter, r *http.Request){
@@ -16,14 +31,15 @@ func handleUploadFile(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	file, handler, err := r.FormFile("file")
+	file, _, err := r.FormFile("file")
 	if err != nil {
 		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
 
-	dst, err := os.Create("shared_files/" + handler.Filename)
+	file_id := uuid.New().String()
+	dst, err := os.Create("shared_files/" + file_id)
 	if err != nil {
 		http.Error(w, "Error creating the file", http.StatusInternalServerError)
 		return
