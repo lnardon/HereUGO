@@ -1,6 +1,6 @@
 FRONTEND_DIR=./frontend
 GO_DIR=.
-SERVER_FILES=main.go files.go
+SERVER_FILES=main.go files.go database.go
 
 build-frontend:
 	cd $(FRONTEND_DIR) && npm install && npm run build
