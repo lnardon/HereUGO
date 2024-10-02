@@ -1,7 +1,6 @@
 FROM node:22.8.0-alpine3.19 AS build-frontend
 WORKDIR /app
 COPY ./frontend .
-RUN npm config set timeout 600000
 RUN npm ci
 RUN npm run build
 
