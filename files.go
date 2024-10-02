@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -11,17 +10,15 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
 func goDotEnvVariable(key string) string {
-  err := godotenv.Load(".env")
+//   err := godotenv.Load(".env")
 
-  if err != nil {
-    log.Fatalf("Error loading .env file")
-  }
-
-  log.Println("Successfully loaded .env file")
+//   if err != nil {
+//     log.Fatalf("Error loading .env file")
+//   }
 
   return os.Getenv(key)
 }
