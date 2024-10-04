@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -68,5 +69,5 @@ func handleUploadFile(w http.ResponseWriter, r *http.Request){
 
 	fileURL := fmt.Sprintf("%s/%s/%s", R2_ENDPOINT, R2_BUCKET, objectKey)
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(fileURL))
+	json.NewEncoder(w).Encode(map[string]string{"url": fileURL})
 }
